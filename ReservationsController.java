@@ -18,7 +18,7 @@ public class ReservationsController {
         System.out.println("Enter room id:");
         Room r = RoomsController.getRoomById(scanner.nextInt(), rooms);
 
-        if (r == null || r.isReserved(a, d)) {
+        if (r == null || !r.isAvailable(a, d)) {
             System.out.println("Room not available!");
             return;
         }
@@ -27,7 +27,7 @@ public class ReservationsController {
         double total = days * r.getPrice();
         total -= total * g.getDiscount() / 100;
 
-        Reservation res = new Reservation(a, d, total, "Reserved", g, r);
+        Reservation res = new Reservation(reservations.size(), g, r, a, d);
         reservations.add(res);
 
         r.reserve(a, d); // IMPORTANT FIX

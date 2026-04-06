@@ -15,7 +15,7 @@ public class RoomsController {
         System.out.println("Enter price:");
         double price = scanner.nextDouble();
 
-        rooms.add(new Room(1000 + rooms.size(), floor, capacity, type, desc, price));
+        rooms.add(new Room(capacity, floor, capacity, type, price));
     }
 
     public static void showAllRooms(ArrayList<Room> rooms) {
