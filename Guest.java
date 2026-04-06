@@ -9,8 +9,6 @@ public class Guest extends Person {
         this.discount = discount;
     }
 
-    public Guest() {}
-
     public String getEmail() { return email; }
     public int getDiscount() { return discount; }
 
@@ -19,9 +17,6 @@ public class Guest extends Person {
 
     @Override
     public void printDetails() {
-        System.out.println("ID: " + id);
-        System.out.println("Name: " + name);
-        System.out.println("Email: " + email);
-        System.out.println("Discount: " + discount);
+        System.out.println(id + " | " + name + " | " + email + " | Discount: " + discount);
     }
 }

@@ -9,8 +9,6 @@ public class Employee extends Person {
         this.job = job;
     }
 
-    public Employee() {}
-
     public double getSalary() { return salary; }
     public String getJob() { return job; }
 
@@ -19,9 +17,6 @@ public class Employee extends Person {
 
     @Override
     public void printDetails() {
-        System.out.println("ID: " + id);
-        System.out.println("Name: " + name);
-        System.out.println("Salary: " + salary);
-        System.out.println("Job: " + job);
+        System.out.println(id + " | " + name + " | " + job + " | $" + salary);
     }
 }

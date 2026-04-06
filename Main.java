@@ -1,39 +1,155 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
+    static ArrayList<Guest> guests = new ArrayList<>();
+    static ArrayList<Employee> employees = new ArrayList<>();
+    static ArrayList<Room> rooms = new ArrayList<>();
+    static ArrayList<Reservation> reservations = new ArrayList<>();
+
+    static Scanner sc = new Scanner(System.in);
+
     public static void main(String[] args) {
 
-        ArrayList<Room> rooms = new ArrayList<>();
-        ArrayList<Guest> guests = new ArrayList<>();
-        ArrayList<Employee> employees = new ArrayList<>();
-        ArrayList<Reservation> reservations = new ArrayList<>();
-
-        Scanner sc = new Scanner(System.in);
-
         while (true) {
-            
-			System.out.println("Welcome to system!");
-			System.out.println("1.Add Room");
-			System.out.println("2.Show Rooms");
-			System.out.println("3.Add Guest");
-			System.out.println("4.Show Guests");
-			System.out.println("5.Add Employee");
-			System.out.println("6.Show Employees");
-			System.out.println("7.Book");
-			System.out.println("8.Exit");
+            System.out.println("\n1.Add Room 2.Add Guest 3.Add Employee 4.Book");
+            System.out.println("5.Show All 6.Delete 7.Update 8.Exit");
+
             int c = sc.nextInt();
 
             switch (c) {
-                case 1 -> RoomsController.addNewRoom(rooms, sc);
-                case 2 -> RoomsController.showAllRooms(rooms);
-                case 3 -> GuestsController.addNewGuest(guests, sc);
-                case 4 -> GuestsController.showAllGuests(guests);
-                case 5 -> EmployeesController.addNewEmployee(employees, sc);
-				case 6 -> EmployeesController.showAllEmployees(employees);
-                case 7 -> ReservationsController.createNewReservation(guests, rooms, reservations, sc);
+                case 1 -> addRoom();
+                case 2 -> addGuest();
+                case 3 -> addEmployee();
+                case 4 -> book();
+                case 5 -> showMenu();
+                case 6 -> deleteMenu();
+                case 7 -> updateMenu();
                 case 8 -> { return; }
+            }
+        }
+    }
+
+    // ===== ADD =====
+    static void addRoom() {
+        System.out.print("Floor: ");
+        int f = sc.nextInt();
+        System.out.print("Capacity: ");
+        int c = sc.nextInt();
+        System.out.print("Type: ");
+        String t = sc.next();
+        System.out.print("Price: ");
+        double p = sc.nextDouble();
+
+        rooms.add(new Room(rooms.size(), f, c, t, p));
+    }
+
+    static void addGuest() {
+        System.out.print("Name: ");
+        String n = sc.next();
+        System.out.print("Email: ");
+        String e = sc.next();
+        System.out.print("Discount: ");
+        int d = sc.nextInt();
+
+        guests.add(new Guest(guests.size(), n, e, d));
+    }
+
+    static void addEmployee() {
+        System.out.print("Name: ");
+        String n = sc.next();
+        System.out.print("Salary: ");
+        double s = sc.nextDouble();
+        System.out.print("Job: ");
+        String j = sc.next();
+
+        employees.add(new Employee(employees.size(), n, s, j));
+    }
+
+    // ===== BOOK =====
+    static void book() {
+        if (guests.isEmpty() || rooms.isEmpty()) {
+            System.out.println("No data!");
+            return;
+        }
+
+        System.out.print("Guest ID: ");
+        Guest g = guests.get(sc.nextInt());
+
+        System.out.print("Room ID: ");
+        Room r = rooms.get(sc.nextInt());
+
+        System.out.print("Arrival (yyyy-mm-dd): ");
+        LocalDate a = LocalDate.parse(sc.next());
+
+        System.out.print("Departure: ");
+        LocalDate d = LocalDate.parse(sc.next());
+
+        if (!r.isAvailable(a, d)) {
+            System.out.println("Room not available!");
+            return;
+        }
+
+        r.reserve(a, d);
+        reservations.add(new Reservation(reservations.size(), g, r, a, d));
+
+        System.out.println("Booked!");
+    }
+
+    // ===== SHOW =====
+    static void showMenu() {
+        System.out.println("1.Room 2.Guest 3.Employee 4.Book");
+        int c = sc.nextInt();
+
+        switch (c) {
+            case 1 -> rooms.forEach(Room::printDetails);
+            case 2 -> guests.forEach(Guest::printDetails);
+            case 3 -> employees.forEach(Employee::printDetails);
+            case 4 -> reservations.forEach(Reservation::printDetails);
+        }
+    }
+
+    // ===== DELETE =====
+    static void deleteMenu() {
+        System.out.println("1.Room 2.Guest 3.Employee 4.Book");
+        int c = sc.nextInt();
+
+        System.out.print("Enter ID: ");
+        int id = sc.nextInt();
+
+        switch (c) {
+            case 1 -> rooms.remove(id);
+            case 2 -> guests.remove(id);
+            case 3 -> employees.remove(id);
+            case 4 -> reservations.remove(id);
+        }
+    }
+
+    // ===== UPDATE =====
+    static void updateMenu() {
+        System.out.println("1.Room 2.Guest 3.Employee");
+        int c = sc.nextInt();
+
+        System.out.print("Enter ID: ");
+        int id = sc.nextInt();
+
+        switch (c) {
+            case 1 -> {
+                Room r = rooms.get(id);
+                System.out.print("New price: ");
+                r.setPrice(sc.nextDouble());
+            }
+            case 2 -> {
+                Guest g = guests.get(id);
+                System.out.print("New name: ");
+                g.setName(sc.next());
+            }
+            case 3 -> {
+                Employee e = employees.get(id);
+                System.out.print("New salary: ");
+                e.setSalary(sc.nextDouble());
             }
         }
     }
